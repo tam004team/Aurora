@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>極光任務：解碼天際之光</title>
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: transparent;/*linear-gradient(to right, #168b91, #248d91, #339296);*/
+      color: #fff;
+      text-align: center;
+      padding: 2em;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: rgba(0,0,0,0.7);
+      border-radius: 15px;
+      padding: 2em;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
+    .hidden { display: none; }
+    button {
+      margin: 1em;
+      padding: 0.75em 2em;
+      font-size: 1.2em;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      background: #34aec9;
+      color: white;
+      transition: background 0.3s ease;
+    }
+    button:hover { background: #5dd5f0; }
+    .choice-btn {
+      display: block;
+      margin: 1em auto;
+      width: 90%;
+      cursor: pointer;
+    } 
+    .content { max-width: 600px; margin: auto; }
+    h1 {
+      font-size: 30px;             /* 字體大小 */
+      color: #ffffff;              /* 白色字體比較適合做光暈效果 */
+      font-weight: bold;           /* 粗體 */
+      text-align: center;          /* 置中 */
+      margin-bottom: 30px;         /* 下方留空 */
+      text-shadow: 
+        0 0 5px #00ffff,           /* 淺紫光暈 */
+        0 0 10px #00ffff,
+        0 0 15px #00ffff,
+        0 0 20px #00ffff;
+      /*background-color: #000000;   /* 建議加深背景讓光暈更明顯 */
+      padding: 0px;
+      border-radius: 10px;
+    }
+    h4 {
+      font-size: 1.4em;
+      line-height: 1.6;
+
+      margin-bottom: 1em;
+      color: #00ffcc;
+    }
+    h5 {
+      font-size: 1.2em;
+      line-height: 1.2;
+      margin-top: 0em;
+      margin-bottom: 1em;
+      color: #b5fff0;
+    }
+    .intro {
+      text-align: left;
+      margin-bottom: 0em;
+      
+      background: rgba(255,255,255,0.05);
+      padding: 0.5em;
+      border-radius: 10px;
+    }
+    
+    #question-title {
+      font-size: *2em;  /* 你可以依需求調整數值 */
+      font-weight: bold; /* 也可以設為 normal, lighter 等 */
+      margin-bottom: 0.5em;
+      color: #00ffcc;
+    }
+    #question-text {
+      font-size: 1.5em;
+      line-height: 1.6;
+      margin-bottom: 1em;
+    }
+    #question-intro {
+      font-size: 1.15em;
+      line-height: 1.2;
+      margin-top: -1em;
+      margin-bottom: 0em;
+    }
+    #feedback-title {
+      font-size: 2em;  /* 你可以依需求調整數值 */
+      font-weight: bold; /* 也可以設為 normal, lighter 等 */
+      margin-bottom: 0.5em;
+      color: #00ffcc;
+    }
+    #feedback-text {
+      font-size: 1.5em;
+      line-height: 1.6;
+      margin-bottom: 1em;
+      text-align: justify;
+    }
+    #knowledge-title {
+      font-size: 2em;  /* 你可以依需求調整數值 */
+      font-weight: bold; /* 也可以設為 normal, lighter 等 */
+      margin-bottom: 0.5em;
+      color: #00ffcc;
+    }
+    #knowledge-text {
+      font-size: 1.5em;
+      line-height: 1.6;
+      margin-bottom: 1em;
+      text-align: justify;
+    }
+    #final-feedback {
+      font-size: 2em;
+      margin: 1em 0;
+      text-align: justify;
+      font-weight: bold;
+      background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet, red);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 2s ease infinite;
+    }
+    .final-score {
+      margin-top: 1em;
+      font-size: 1.8em;
+      color: #00ffcc;
+    }
+    .all-endings {
+      margin-top: 1.6em;
+      font-size: 1.2em;
+      color: #eee;
+      text-align: left;
+      padding: 1em;
+      background-color: rgba(255,255,255,0.05);
+      border-radius: 10px;
+    }
+    #result-screen .all-endings h3 {
+      margin-top: 0em;
+      /*font-size: 0.95em; /* 修改"所有評語對照表"標題的字體大小 */
+    }
+
+    #result-screen .all-endings ul li {
+      text-align: justify;
+      /*font-size: 0.5em; /* 修改評語列表的字體大小 */
+    }
+    
+    .score-display {
+      margin-top: 1em;
+      font-size: 1em;
+      color: #ffffff;
+    }
+    
+    .option-button {
+      display: block;
+      margin: 10px auto;
+      width: 80%;
+    }
+    .hidden {
+      display: none;
+    }
+    
+    #final-highlight {
+      font-size: 1.5em;
+      margin: 1em 0;
+      font-weight: bold;
+      text-align: center;
+      background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet, red);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 2s ease infinite;
+    }
+    h6 {
+      font-size: 1.3em;
+      margin: 1em 0;
+      text-align: justify;
+      color: #00ffcc;
+      text-align: center;
+    }
+    
+    @keyframes rainbow {
+      0% { background-position: 100% 50%; }
+      50% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+  <div id="start-screen">
+    <h1>極光任務：解碼天際之光</h1>
+    <h4>追尋極光起源，解開天際祕語！</h4>
+    <div class="intro">
+      <h5>夜空突然被一道光幕點亮，像是宇宙在傳遞某種訊息……宇宙劇場電影《極光》的內容化為這款小遊戲，跟著極光的線索，一步步解開其中的奧秘。</h5>
+      <h5>你，就是這場任務的觀測者與解碼者！</h5>
+      <h3>🔍 遊戲說明</h3>
+      <p>🌌 <strong>背景故事</strong><br>你是一位參與極光研究任務的觀測員。任務目標是透過一系列知識挑戰，解開極光的成因與變化，彙整宇宙間的光之紀錄，展開全方位的追光任務！
+
+</p>
+      <p>🧠 <strong>玩法簡介</strong><br>遊戲總共 9 關。每關只有一個正確答案，答對得 1 分，答錯 0 分。</p>
+      <p>🏆 <strong>目標與結局</strong><br>遊戲結束後，將根據你的總分給予不同的評語與稱號。你能成功破解所有謎團，成為極光解碼者嗎？</p>
+    </div>
+	<p>註：本遊戲介面設計以手機使用者為主，於電腦瀏覽時部分內容可能無法完整顯示。</p>
+    <button onclick="startGame()">開始遊戲</button>
+  </div>
+  <!-- 問題頁 -->
+  <div id="question-screen" class="hidden">
+    <h2 id="question-title"></h2>
+    <p style="text-align: justify;" id="question-text"></p>
+    <div id="options-container"></div>
+  </div>
+  <!-- 回饋頁 -->
+  <div class="hidden" id="feedback-screen">
+    <h3 id="feedback-title"></h3>
+    <p id="feedback-text"></p>
+    <div id="round-score" class="score-display hidden"></div>
+    <button onclick="showKnowledge()">查看解析</button>
+  </div>
+  <!-- 知識頁 -->
+  <div class="hidden" id="knowledge-screen">
+    <h3 id="knowledge-title">知識補充</h3>
+    <p id="knowledge-text"></p>
+    <button onclick="nextQuestion()">下一頁</button>
+  </div>
+  <!-- 結尾頁 -->
+  <div id="final-message-screen" class="hidden">
+    <h6>除了火星，我們還探索銀河中是否有與我們類似的星球。然而，浩瀚星辰中，我們發現自己仍然形單影隻。<br>但是透過璀璨奪目的極光，我們向宇宙展現了我們的存在。<br>你已完成所有任務，成功解碼極光背後的秘密。<br>宇宙仍有許多未知等待被發現——<br>任務結束，但探索永無止境。</h6>
+    <h2 id="final-highlight">未來的觀測者，將以你的紀錄為起點，<br>繼續追尋宇宙的光之軌跡。</h2>
+    <div id="info-link" class="hidden" style="margin-top: 1em;"></div>
+    <button onclick="showResult()">下一頁</button>
+  </div>
+  <!-- 結算頁 -->
+  <div class="hidden" id="result-screen">
+    <h2>🌟 任務結束！</h2>
+    <p id="final-feedback"></p>
+    <div class="final-score" id="final-score"></div>   
+    <div class="all-endings">
+      <h3>所有評語對照表：</h3>
+      <ul>
+        <li>0–2 分：極光的世界於你而言仍在雲霧之中，有待探索。</li>
+        <li>3–5 分：你已踏出關鍵一步，理解正逐漸清晰。</li>
+        <li>6–8 分：你能精準解析極光，幾乎掌握全貌，是位優秀極光分析員！</li>
+        <li>9 分：你成功解開極光所有謎題，是知識與觀測能力兼具的極光解碼者！</li>
+      </ul>
+    </div>
+    <button onclick="restart()">重新開始</button>
+  </div>
+</div>
+  <script>
+    const questions = [
+      {
+        title: "第 1 關：神話傳說",
+        question: "極光在人類歷史中，常被賦予神秘的象徵。下面哪個不是過去文化中對極光的解釋？",
+        options: [
+          "北極狐尾巴掃過天空產生火花",
+          "亡靈在天上跳舞",
+          "天使在雲端傳送訊息",
+          "Aurora 是黎明女神的名字"
+        ],
+        answerIndex: 2,
+        feedback: "各地文化都有關於極光的美麗傳說，雖然不是科學，但它們曾陪伴人們仰望星空。",
+        knowledge: `在古代，極光的出現往往難以解釋，因此人們用神話與傳說賦予它意義：
+        
+        · 北歐芬蘭的傳說中，一隻北極狐在雪地奔跑，牠的尾巴掃過天空，激起火花，形成極光（這也是“revontulet”這個芬蘭詞的來源，意思是「狐火」）
+        
+        · 北美印地安原住民相信，極光是亡靈在跳舞，與祖先溝通的光
+        
+        · 羅馬神話中，Aurora 是黎明女神，她的名字後來成為極光的正式命名（Aurora Borealis）
+        
+        雖然今天我們有了科學解釋，但這些故事仍是人類與自然互動的一部分，也是我們仰望星空時的重要想像力。`
+      },
+      {
+        title: "第 2 關：極光怎麼來的",
+        question: "在極地的夜空裡，有時會出現跳動的光幕，像是天空在發光，這樣的景象讓人驚嘆不已，它是怎麼產生的呢？",
+        options: [
+          "月亮的反光照亮了天空",
+          "火山爆發噴出發光的氣體",
+          "太陽風中的粒子撞到地球大氣",
+          "雲層中的水氣折射出彩色光線"
+        ],
+        answerIndex: 2,
+        feedback: "極光是來自天空中粒子的碰撞所產生的光。",
+        knowledge: `極光是太陽和地球一起演出的光之魔法！
+        
+        太陽有時候會噴出很多粒子，像風一樣吹向地球，這就是「太陽風」。
+        
+        地球有一個看不見的保護罩叫「磁場」，會把這些粒子引導到北極和南極的天空。
+        
+        當這些粒子撞到大氣中的氣體，就會發出漂亮的光，我們就能看到極光啦！`
+      },
+      {
+        title: "第 3 關：極光的顏色",
+        question: "極光會呈現不同顏色，這些顏色包括哪些呢？",
+        options: [
+          "紅色",
+          "綠色",
+          "藍／紫色",
+          "以上皆是"
+        ],
+        answerIndex: 3,
+        feedback: "極光的顏色取決於高能粒子碰撞的氣體種類。",
+        knowledge: `當太陽風的粒子與大氣中的氣體碰撞時，就會發出各種顏色的光。綠光是最常見的顏色，紅光和藍光也可能出現，這取決於粒子的能量和碰撞的氣體種類與高度，像是綠光，就是粒子在 100 公里以上的高度與氧原子碰撞產生的，具體如下：
+        
+        · 紅：高層（ > 200 公里）氧原子
+        
+				· 綠：中層（ > 100 公里）氧原子
+        
+        · 藍／紫：氮分子
+        
+        · 粉紅：多種顏色光混合所致
+        
+        這些顏色讓極光宛如夜空中跳動的彩色絲帶，是大氣與宇宙能量的交會所產生的美麗光景！`
+      },
+      {
+        title: "第 4 關：地球磁場的角色",
+        question: "極光通常只出現在特定區域的天空，這和地球本身的什麼特性有關呢？",
+        options: [
+          "地球有海洋能反射光",
+          "地球磁場的保護作用",
+          "地球內部有火山活動",
+          "月亮的位置會改變地球能量"
+        ],
+        answerIndex: 1,
+        feedback: "地球的磁場不只是保護傘，它還會引導極光出現在極地！",
+        knowledge: `地球就像一顆大磁鐵，有一層看不見的磁場保護我們。這個磁場不但擋住太陽風，還會把太陽風的粒子帶到北極和南極的天空。那些粒子和空氣中的氣體碰撞，就會發光，這就是極光。
+        
+        沒有磁場，太陽風的粒子就不會集中在極地，極光可能會消失或在不同緯度發生；除此之外，粒子會直接撞擊大氣層，不只會使電子設備干擾或受損，還會破壞生物體內的 DNA ，增加癌症風險，就不會有我們所熟悉的安全環境！`,
+      },
+      {
+        title: "第 5 關：合適的觀賞時機",
+        question: "常有人說太陽活動強，極光才會出現。你覺得這句話正確嗎？",
+        options: [
+          "是，太陽活動越強，極光就一定會出現",
+          "不一定，還要看其他條件",
+          "看天氣好不好"
+        ],
+        answerIndex: 1,
+        feedback: "太陽風不是只有在太陽很活躍的時候才會出現，安靜的太陽也可能讓極光來敲門！",
+        knowledge: `太陽表面有時會出現一些黑色的斑點，這些稱為「太陽黑子」，它們代表太陽活動特別活躍的區域。經過長期觀察，科學家發現太陽的黑子數量大約每 11 年會有一個高峰，這就稱為太陽活動週期。
+        
+        太陽活動週期活躍時，太陽常常會突然「噗！」地噴出一大團熱熱的、帶電的氣體，這就是「日冕物質拋射（CME）」，像太陽打的「噴嚏」，一次噴出好多東西，比平常的太陽風強很多。如果這個噴嚏吹向地球時，就容易出現頻繁或劇烈的極光。
+        
+        太陽活動週期寧靜時，有些區域（叫做「日冕洞」）也會噴出太陽風，噴發出的太陽風如果面向地球，也會讓極光出現喔！
+        
+        所以，「極光的產生與太陽活動週期有關」是錯誤的迷思喔！別以為太陽休息了，天空就不會跳舞～`,
+      },
+      {
+        title: "第 6 關：合適的觀賞地點",
+        question: "有人說只要運氣好，在城市裡也能看到極光。但如果你真的想親眼目睹極光，應該去哪裡最有機會？",
+        options: [
+          "熱帶城市（如新加坡）",
+          "極地附近（如阿拉斯加）",
+          "高山森林（如喜馬拉雅山）",
+          "乾燥沙漠（如撒哈拉沙漠）"
+        ],
+        answerIndex: 1,
+        feedback: "想看到極光？你得靠近地球的兩極才行！冰島、阿拉斯加、黃刀鎮都是熱門地點喔！",
+        knowledge: `地球的磁場會引導太陽風的粒子往南北極方向移動，因此極光通常出現在靠近磁極的天空。這些區域形成一個「極光帶」，又稱為「極光橢圓區」，環繞在地磁極周圍。這些地方越靠近極光帶中心，看到極光的機率就越高。最常見的觀賞地點包括：
+        
+        · 北美洲的阿拉斯加、加拿大的黃刀鎮和育空地區
+        · 北歐的冰島、挪威、芬蘭北部
+        · 南半球的南極周邊也能見到南極光，但交通不便
+        
+        在太陽活動非常劇烈時，極光可能延伸到緯度較低的地區，但那是少見的例外。想看極光，記得往高緯度、遠離城市燈光的地方去，才是最佳選擇！`,
+      },     
+      {
+        title: "第 7 關：觀賞準備",
+        question: "如果想要觀賞極光，應該準備哪些呢？",
+        options: [
+          "保暖物品",
+          "當地交通資訊",
+          "白天先場勘地形",
+          "以上皆是"
+        ],
+        answerIndex: 3,
+        feedback: "追光之旅不只靠運氣，也需要好好準備！安全、保暖和熟悉環境缺一不可。",
+        knowledge: `想要順利看到極光，不只要看天氣和太陽活動，也要在地面做好準備：
+        
+        · 保暖裝備是必須的，因為極光通常在高緯度寒冷地區出現，而且是在晚上長時間戶外等待。
+        
+        · 查詢交通與地點資訊能避免迷路或錯過最佳觀賞地點，特別是在鄉間或偏遠區域。
+        
+        · 白天先去現場場勘非常重要！很多地方晚上沒有路燈，地形又不熟，若白天提前探查路線與地勢，可以減少危險、找到好視野的位置，也避免晚上臨時摸黑行動。
+        
+        小提醒：避開城市燈光、耐心等待、還要記得抬頭看天空，就是欣賞極光最重要的三件事！`,
+      },
+      {
+        title: "第 8 關：爆發？！",
+        question: "有時候，極光會突然變得非常明亮，像瀑布一樣傾瀉而下，甚至照亮整片天空。這樣的極光爆發，最常是因為什麼引起的呢？",
+        options: [
+          "月亮反射更多陽光",
+          "地球天氣變得寒冷",
+          "太陽風帶來大量高能粒子",
+          "衛星傳來的電磁干擾"
+        ],
+        answerIndex: 2,
+        feedback: "當太陽風突然加強，更多粒子衝進地磁層，就會引發一場壯觀的極光爆發！",
+        knowledge: `有時候，極光不像平常那樣靜靜地在天邊跳舞，而是劇烈地閃動、快速擴展、甚至像瀑布般傾瀉而下，這種現象就叫做「極光爆發」或「極光亞爆」（auroral substorm）。
+        
+        這種爆發通常是因為太陽風突然變強，很多粒子衝進來，把高空撞得閃閃發光。
+        
+        NASA 的衛星觀測發現，極光爆發的背後常伴隨「磁場重連」的現象──也就是地球磁場的磁力線在外太空中斷裂、重新連接，釋放出大量能量。
+        
+        這不只是一場光秀，它也會影響地球上的通訊衛星、電力系統與導航設備，是一種美麗同時具有威力的宇宙現象！`, 
+      },
+      {
+        title: "第 9 關：宇宙極光",
+        question: "你知道嗎？極光並不只出現在地球。那麼，以下哪一個星球「目前」也有被觀測到極光現象？",
+        options: [
+          "金星",
+          "月球",
+          "火星",
+          "木星"
+        ],
+        answerIndex: 3,
+        feedback: "地球不是唯一擁有極光的星球！木星也有強大的磁場，能產生壯觀的極光喔！",
+        knowledge: `極光的出現，除了需要太陽風，還需要兩個重要條件：大氣和磁場。
+        
+        金星雖然有大氣，但沒有全球性的磁場，無法產生完整的極光結構。月球甚至幾乎沒有大氣，完全不具備產生極光的條件。
+        
+        火星雖然曾經有磁場與濃厚大氣，但它的內部早已冷卻，磁場也消失了，如今的大氣層很稀薄，只能偶爾觀測到微弱的紫外極光，不像地球那麼明顯。
+        
+        木星是一個巨大的氣態行星，擁有太陽系中最強的行星磁場，因此會產生壯觀的極光，尤其在極區非常明亮，甚至比地球的極光還強。
+        
+        所以，極光其實是宇宙中常見的現象，只要條件足夠，不只是地球，其他行星也能有自己的光之舞！`,
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function startGame() {
+      document.getElementById("start-screen").classList.add("hidden");
+      showQuestion();
+    }
+    function formatknowledge(knowledge) {
+  		return knowledge
+      .replace(/\n/g, '<br>') // 若你 intro 裡是用換行符號斷行，也可以加這行
+      .replace(/\s{2,}/g, ''); // 清除多餘空白
+  	}
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById("question-screen").classList.remove("hidden");
+      document.getElementById("question-title").textContent = q.title;
+      document.getElementById("question-text").textContent = q.question;
+      const optionsContainer = document.getElementById("options-container");
+      optionsContainer.innerHTML = "";
+      q.options.forEach((opt, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.className = "option-button";
+        btn.onclick = () => checkAnswer(index);
+        	
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+
+    function checkAnswer(selectedIndex) {
+      document.getElementById("question-screen").classList.add("hidden");
+      const q = questions[currentQuestion];
+      document.getElementById("feedback-screen").classList.remove("hidden");
+      if (selectedIndex === q.answerIndex) {
+        document.getElementById("feedback-title").textContent = "答對了！";
+        score++;
+      } else {
+        document.getElementById("feedback-title").textContent = "答錯了...";
+      }
+      document.getElementById("round-score").innerHTML =
+        `目前總分：<strong>${score}</strong>`;
+      document.getElementById("round-score").classList.remove("hidden");
+      document.getElementById("feedback-text").textContent = q.feedback;
+    }
+
+    function showKnowledge() {
+      document.getElementById("feedback-screen").classList.add("hidden");
+      document.getElementById("knowledge-screen").classList.remove("hidden");
+      document.getElementById("knowledge-text").innerHTML = formatknowledge(questions[currentQuestion].knowledge);
+      const info = questions[currentQuestion];
+      const link = info && info.link;
+      const linkArea = document.getElementById("info-link");
+      if (link) {
+        linkArea.innerHTML = "<p>相關內容</p>";
+
+        // 情況 1：多個網址
+        if (Array.isArray(link)) {
+          link.forEach(l => {
+            linkArea.innerHTML += `<a href="${l.url}" target="_blank" style="display:block; color:#00ccff;">${l.text}</a>`;
+          });
+        }
+        // 情況 2：單一網址
+        else if (link.url && link.text) {
+          linkArea.innerHTML += `<a href="${link.url}" target="_blank" style="display:block; color:#00ccff;">${link.text}</a>`;
+        }
+
+        linkArea.classList.remove("hidden");
+      } else {
+        linkArea.innerHTML = "";
+        linkArea.classList.add("hidden");
+      }
+    }
+
+    function nextQuestion() {
+      document.getElementById("knowledge-screen").classList.add("hidden");
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+    		showFM();
+      }      
+    }
+    
+    function showFM() {
+      document.getElementById("final-message-screen").classList.remove("hidden");
+      const linkArea = document.getElementById("info-link");
+      const link = [
+        { text: "展示場 1 樓：太陽風", url: "https://sites.google.com/view/tamwebtp/%E4%B8%80%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E5%A4%AA%E7%A9%BA%E6%8E%A2%E9%9A%AA/%E5%A4%AA%E9%99%BD%E9%A2%A8"},
+        { text: "展示場 1 樓：極光", url: "https://sites.google.com/view/tamwebtp/%E4%B8%80%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E5%A4%AA%E7%A9%BA%E6%8E%A2%E9%9A%AA/%E6%A5%B5%E5%85%89"},
+        { text: "展示場 2 樓：太陽表面活動", url: "https://sites.google.com/view/tamwebtp/%E4%BA%8C%E6%A8%93%E5%B1%95%E7%A4%BA%E5%8D%80_1/%E6%81%86%E6%98%9F/%E5%A4%AA%E9%99%BD%E8%A1%A8%E9%9D%A2%E6%B4%BB%E5%8B%95"},
+        { text: "天文新知：首次在天王星上偵測到紅外線極光", url: "https://tam.gov.taipei/News_Content.aspx?n=EF86D8AF23B9A85B&sms=F32C4FF0AC5C2801&s=E4EC0BC83794D0F3"},
+        { text: "天文新知：首度捕捉到海王星極光", url: "https://tam.gov.taipei/News_Content.aspx?n=EF86D8AF23B9A85B&sms=F32C4FF0AC5C2801&s=D498FD22CE3CA7C5"},
+        { text: "天文新知：韋伯望遠鏡揭示木星極光變化急遽", url: "https://tam.gov.taipei/News_Content.aspx?n=EF86D8AF23B9A85B&sms=F32C4FF0AC5C2801&s=4F9B1CCEBC401B4F"},
+        { text: "天文新知：在火星地表首度觀測到可見光波段的綠色極光", url: "https://tam.gov.taipei/News_Content.aspx?n=EF86D8AF23B9A85B&sms=F32C4FF0AC5C2801&s=D694D552027F0520"},
+        { text: "星際之旅：遇見歐若菈追極光科學指南", url: "https://sites.google.com/view/encounter-the-aurora/aurora"}
+      ];
+      if (link) {
+        linkArea.innerHTML = "<p>相關內容</p>";
+
+        if (Array.isArray(link)) {
+          link.forEach((l) => {
+            linkArea.innerHTML += `<a href="${l.url}" target="_blank" style="display:block; color:#00ccff;">${l.text}</a>`
+          });
+        }
+        linkArea.classList.remove("hidden");
+      }
+    }
+
+    function showResult() {
+    document.getElementById("final-message-screen").classList.add("hidden");
+      document.getElementById("result-screen").classList.remove("hidden");
+      document.getElementById("final-score").textContent = `你的總分：${score}/9`;
+      let feedback = "";
+      if (score === 9) feedback = "你成功解開極光所有謎題，是知識與觀測能力兼具的極光解碼者！";
+      else if (score >= 6) feedback = "你能精準解析極光，幾乎掌握全貌，是位優秀極光分析員！";
+      else if (score >= 3) feedback = "你已踏出關鍵一步，理解正逐漸清晰。";
+      else feedback = "極光的世界於你而言仍在雲霧之中，有待探索。";
+      document.getElementById("final-feedback").textContent = feedback;
+    }
+    
+    function restart() {
+        // 隱藏所有頁面
+        document.getElementById("question-screen").classList.add("hidden");
+        document.getElementById("knowledge-screen").classList.add("hidden");
+        document.getElementById("final-message-screen").classList.add("hidden");
+        document.getElementById("result-screen").classList.add("hidden");
+
+        // 顯示首頁
+        document.getElementById("start-screen").classList.remove("hidden");
+
+        // 重置狀態
+        currentQuestion = 0;
+        score = 0;
+      }
+  </script>
+</body>
+</html>
+
